@@ -208,7 +208,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		// Guess for the world-space position of the player's feet, directly beneath the HMD.
+		// Guess for the world-space position of the player's feet, directly beneath the HMD.//발 아래 그림띄우기
 		//-------------------------------------------------
 		public Vector3 feetPositionGuess
 		{
