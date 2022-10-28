@@ -74,7 +74,7 @@ public class EnemySpawnManager : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
 
         //적의 타겟 설정
-        //enemy.GetComponent<EnemyFSM>().Setup(target);
-        enemy.GetComponent<Enemy>().Setup(target);
+        enemy.GetComponent<EnemyMove>().Setup(target);
+        //enemy.GetComponent<Enemy>().Setup(target);
     }
 }
