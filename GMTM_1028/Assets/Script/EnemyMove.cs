@@ -13,9 +13,9 @@ public class EnemyMove : MonoBehaviour
 
     [Header("Pursuit")]
     [SerializeField]
-    private float targetRecognitionRange = 20;         //�ν� ����(�� ���� �ȿ� ������ "Pursuit" ���·� ����)
+    private float targetRecognitionRange = 15;         //�ν� ����(�� ���� �ȿ� ������ "Pursuit" ���·� ����)
     [SerializeField]
-    private float pursuitLimitRange = 30;           //���� ���� (�� ���� �ٱ����� ������ "Wander" ���·� ����)
+    private float pursuitLimitRange = 20;           //���� ���� (�� ���� �ٱ����� ������ "Wander" ���·� ����)
 
     [Header("Attack")]
     [SerializeField]
@@ -83,9 +83,10 @@ public class EnemyMove : MonoBehaviour
 
     private IEnumerator Idle()
     {
+        enemyAnim.SetInteger("EnemyState", 0);
         //n�� �Ŀ� "��ȸ" ���·� �����ϴ� �ڷ�ƾ ����
         StartCoroutine("AutoChangeFromIdleToWander");
-
+        
         while (true)
         {
 
@@ -111,6 +112,8 @@ public class EnemyMove : MonoBehaviour
 
             if (Time.time - attackCoolTime > attackRate)
             {
+                enemyAnim.SetInteger("EnemyState", 2);
+
                 //�����ֱⰡ �Ǿ�� ������ �� �ֵ��� �ϱ� ���� ���� �ð� ����
                 attackCoolTime = Time.time;
 
@@ -136,8 +139,10 @@ public class EnemyMove : MonoBehaviour
 
     private IEnumerator Wander()
     {
-        float currentTime = 0;
-        float maxTime = 10;
+        float currentTime = 0.0f;
+        float maxTime = 5.0f;
+
+        enemyAnim.SetInteger("EnemyState", 0);
 
         //�̵� �ӵ� ����
         navMeshAgent.speed = status.WalkSpeed;
@@ -211,6 +216,8 @@ public class EnemyMove : MonoBehaviour
     {
         while (true)
         {
+            enemyAnim.SetInteger("EnemyState", 1);
+
             //�̵� �ӵ� ���� (��ȸ �� ���� �ȴ� �ӵ��� �̵�, �߰��� ���� �ٴ� �ӵ��� �̵�)
             navMeshAgent.speed = status.RunSpeed;
 
@@ -246,18 +253,19 @@ public class EnemyMove : MonoBehaviour
             //navMeshAgent.isStopped = true;
             ChangeState(EnemyState.Attack);
         }
-        else if (distance <= targetRecognitionRange)
+        //else if (distance <= targetRecognitionRange)
+        else if (distance >= attackRange)
         {
             //lookCheck = false;
             //navMeshAgent.isStopped = false;
             ChangeState(EnemyState.Pursuit);
         }
-        else if (distance >= pursuitLimitRange)
-        {
-            //lookCheck = false;
-            //navMeshAgent.isStopped = false;
-            ChangeState(EnemyState.Wander);
-        }
+        //else if (distance >= pursuitLimitRange)
+        //{
+        //    //lookCheck = false;
+        //    //navMeshAgent.isStopped = false;
+        //    ChangeState(EnemyState.Wander);
+        //}
     }
 
     private void LookRotationToTarget()
@@ -308,12 +316,8 @@ public class EnemyMove : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        float targetRadius = 0;
-        float targetRange = 0;
-        targetRadius = 1f;// 회전 속도
-        targetRange = 25f;  // 타켓 범위
+    {      
         rayHits =
-            Physics.SphereCastAll(transform.position, targetRadius, transform.forward, targetRange, LayerMask.GetMask("Player"));
+            Physics.SphereCastAll(transform.position, attackRate, transform.forward, attackRange, LayerMask.GetMask("Player"));
     }
 }
