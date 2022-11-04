@@ -7,6 +7,9 @@ public class PlayerTest : MonoBehaviour
 {
     public warnning warnning;
 
+    public Drill drill;
+
+    public EventManager eventManager;
 
     public bool EventKey;
 
@@ -22,14 +25,18 @@ public class PlayerTest : MonoBehaviour
     //돈을 얻으면 뒤에 가방
     public GameObject bag;
 
+    //얻은 물품의 이름을 가져오는 코드
     public string idcode;
+
+    //문을 열 열쇠를 갖고있는가
+    public bool isCardkey = false;
 
     // Start is called before the first frame update
     void Start()
     {
         LimitTime = 5.5f;
         //ThrowingTutorial call = GameObject.Find("NoSteamVRFallbackObjects").GetComponent<ThrowingTutorial>();
-
+        
     }
 
     // Update is called once per frame
@@ -71,13 +78,30 @@ public class PlayerTest : MonoBehaviour
                         {
                             hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
                             hit.transform.gameObject.GetComponent<Outline>().enabled = false;
-                        }
-
-                        
+                        }     
                     }
                 }
 
-                // 돈 오브젝트에 대한 상호작용
+                //드릴 오브젝트 수리
+
+                if (hit.transform.gameObject.tag == "Drill")
+                {
+                    if (eventManager.drillBroken)
+                    {
+                        text.SetActive(true);
+                        LimitTime -= Time.deltaTime;
+                        text_Timer.text = "" + Mathf.Round(LimitTime);
+
+                        if (LimitTime <= 1)
+                        {
+                            Debug.Log("Check");
+                            eventManager.drillFixSucces = true;
+                            text.SetActive(false);
+                        }
+                    }
+                }
+
+                    // 돈 오브젝트에 대한 상호작용
                 if (hit.transform.gameObject.tag == "Money")
                 {
 
@@ -120,13 +144,12 @@ public class PlayerTest : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
+
             //리미트 시간 설정 
             LimitTime = 5.5f;
             text.SetActive(false);
         }
-
     }
-
 }

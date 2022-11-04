@@ -8,9 +8,14 @@ public class UIController : MonoBehaviour
 
     public GameObject canvas;
 
+    public GameObject button;
+
+    public GameObject text;
+
     public Animator anim;
 
     public bool m_IsButtonDowning;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +36,7 @@ public class UIController : MonoBehaviour
             if (playertest.LimitTime <= 1)
             {
                 canvas.SetActive(false);
+                button.SetActive(false);
                 m_IsButtonDowning = false;
                 playertest.text.SetActive(false);
                 anim.SetBool("isCheck", true);
@@ -41,14 +47,38 @@ public class UIController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Player door Enter");
         canvas.SetActive(true);
+
+        // 플레이어가 철창 콜리더를 들어왔을 때 
+        if (other.CompareTag("Player")) //플레이어로 바꿀 예정
+        {
+            Debug.Log("Player Iron door Enter");
+            
+            if (playertest.isCardkey) {
+                Debug.Log("player 카드 갖고있음");
+                button.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("player 카드 없음");
+                text.SetActive(true);
+            }
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Player door Exit");
-        canvas.SetActive(false);
+        //플레이어가 철창을 콜리더을 나갔을 때 
+        if (other.CompareTag("Player")) //플레이어로 바꿀 예정
+        {
+            canvas.SetActive(false);
+            Debug.Log("Player Iron door Exit");
+            button.SetActive(false);
+            text.SetActive(false);
+
+        }
+        
     }
     public  void PointerDown()
     {

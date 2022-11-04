@@ -8,11 +8,13 @@ TagManager:
   - Money
   - Bag
   - UIEvent
+  - Iron door
+  - Drill
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - CoreUI
   - Water
   - UI
   - postprocessing
