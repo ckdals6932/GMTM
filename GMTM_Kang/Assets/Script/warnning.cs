@@ -10,6 +10,8 @@ public class warnning : MonoBehaviour
 
     public bool event_check_1;
 
+    public bool Eventwarnning;
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,10 +27,19 @@ public class warnning : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("check");
-        for(int i = 0; i < event_1.Count; i++)
+        if (other.tag == "Player")
         {
-            event_1[i].GetComponent<Outline>().enabled = true;
+            Debug.Log("check");
+            for (int i = 0; i < event_1.Count; i++)
+            {
+                event_1[i].GetComponent<Outline>().enabled = true;
+                Eventwarnning = true;
+            }
         }
+    }
+
+    public bool warnningCheck()
+    {
+        return Eventwarnning;
     }
 }

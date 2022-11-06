@@ -57,6 +57,7 @@ public class Drill : MonoBehaviour
         {
             Destroy(gameObject);
             gameObject.SetActive(false);
+            
         }
     }
 

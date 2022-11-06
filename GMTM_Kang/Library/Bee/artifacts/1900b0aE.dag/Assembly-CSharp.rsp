@@ -358,6 +358,7 @@
 "Assets/Script/Movement3D.cs"
 "Assets/Script/MovementTransform.cs"
 "Assets/Script/Outline.cs"
+"Assets/Script/People.cs"
 "Assets/Script/PlayerController.cs"
 "Assets/Script/PlayerTest.cs"
 "Assets/Script/PlayerToTarger.cs"
