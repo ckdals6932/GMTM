@@ -33,7 +33,7 @@ public class People : MonoBehaviour
         peopleUpdate();
         if (Running)
         {
-            navMeshAgent.SetDestination(exit    Position.position);
+            navMeshAgent.SetDestination(exitPosition.position);
         }
     }
     public void peopleUpdate()
