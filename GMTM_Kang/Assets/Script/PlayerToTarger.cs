@@ -12,8 +12,6 @@ public class PlayerToTarger : MonoBehaviour
 
     public Transform player;
 
-    public Transform objectUI;
-
     public float Dist;
     // Start is called before the first frame update
     void Start()

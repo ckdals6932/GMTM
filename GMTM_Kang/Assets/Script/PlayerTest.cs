@@ -104,10 +104,12 @@ public class PlayerTest : MonoBehaviour
                     }
                 }
 
-                if (hit.transform.gameObject.tag == "Key")
+                //열쇠에 대한 상호작용
+                if (hit.transform.gameObject.tag == "Key" && !isCardkey)
                 {
                     key.SetActive(false);
                     isCardkey = true;
+                    Destroy(hit.transform.gameObject, 0.1f);
                 }
 
                     // 돈 오브젝트에 대한 상호작용
@@ -155,7 +157,6 @@ public class PlayerTest : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-
             //리미트 시간 설정 
             LimitTime = 5.5f;
             text.SetActive(false);

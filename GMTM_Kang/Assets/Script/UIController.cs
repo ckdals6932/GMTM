@@ -39,8 +39,11 @@ public class UIController : MonoBehaviour
                 button.SetActive(false);
                 m_IsButtonDowning = false;
                 playertest.text.SetActive(false);
+
                 anim.SetBool("isCheck", true);
                 gameObject.GetComponent<BoxCollider>().enabled = false;
+
+                playertest.isCardkey = false;
             }
         }
     }
