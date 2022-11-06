@@ -83,6 +83,7 @@ public class UIController : MonoBehaviour
     public  void PointerDown()
     {
         m_IsButtonDowning = true;
+        playertest.text.SetActive(true);;
     }
 
     public void PointerUp()

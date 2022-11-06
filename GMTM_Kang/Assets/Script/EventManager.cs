@@ -5,9 +5,13 @@ using UnityEngine;
 public class EventManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public bool drillFixSucces;
+    public bool drillFixSucces = false;
 
-    public bool drillBroken;
+    public bool drillBroken = false;
+
+    public bool vaultEvent = false;
+
+    public GameObject endingUI;
 
     void Start()
     {
@@ -17,6 +21,9 @@ public class EventManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(vaultEvent)
+        {
+            endingUI.SetActive(true);
+        }
     }
 }

@@ -12,13 +12,9 @@ public class Drill : MonoBehaviour
 
     private float drillsecond = 10;
 
-    public bool drillFixCheck = false;
-
-    public bool drillBroken = false;
-
-    public bool m_IsButtonDowning;
-
     public EventManager eventManager;
+
+    public Animator dooranim;
 
 
     // Start is called before the first frame update
@@ -57,19 +53,9 @@ public class Drill : MonoBehaviour
         {
             Destroy(gameObject);
             gameObject.SetActive(false);
-            
+            dooranim.SetBool("isopen", true);
+            eventManager.vaultEvent = true;
+
         }
-    }
-
-    public void PointerDown()
-    {
-        m_IsButtonDowning = true;
-        playertest.LimitTime = 10f;
-    }
-
-    public void PointerUp()
-    {
-        m_IsButtonDowning = false;
-        playertest.text.SetActive(false);
     }
 }
