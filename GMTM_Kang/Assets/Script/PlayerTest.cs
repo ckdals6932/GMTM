@@ -14,7 +14,7 @@ public class PlayerTest : MonoBehaviour
     public bool EventKey;
 
     // 소요 시간
-    public float LimitTime;
+    public float LimitTime = 5.5f;
 
     //텍스트 문자 
     public TextMeshProUGUI text_Timer;
@@ -31,13 +31,15 @@ public class PlayerTest : MonoBehaviour
     //문을 열 열쇠를 갖고있는가
     public bool isCardkey = false;
 
+    public GameObject key;
+
     // Start is called before the first frame update
     void Start()
     {
-        LimitTime = 5.5f;
         //ThrowingTutorial call = GameObject.Find("NoSteamVRFallbackObjects").GetComponent<ThrowingTutorial>();
         
     }
+
 
     // Update is called once per frame
     void Update()
@@ -73,6 +75,7 @@ public class PlayerTest : MonoBehaviour
                             {
                                 warnning.event_1[i].GetComponent<Outline>().enabled = false;
                             }
+                            key.SetActive(true);
                         }
                         else
                         {
@@ -83,7 +86,6 @@ public class PlayerTest : MonoBehaviour
                 }
 
                 //드릴 오브젝트 수리
-
                 if (hit.transform.gameObject.tag == "Drill")
                 {
                     if (eventManager.drillBroken)
@@ -97,12 +99,19 @@ public class PlayerTest : MonoBehaviour
                             Debug.Log("Check");
                             eventManager.drillFixSucces = true;
                             text.SetActive(false);
+                            eventManager.drillBroken = false;
                         }
                     }
                 }
 
+                if (hit.transform.gameObject.tag == "Key")
+                {
+                    key.SetActive(false);
+                    isCardkey = true;
+                }
+
                     // 돈 오브젝트에 대한 상호작용
-                if (hit.transform.gameObject.tag == "Money")
+                    if (hit.transform.gameObject.tag == "Money")
                 {
 
                     idcode = hit.transform.gameObject.name;

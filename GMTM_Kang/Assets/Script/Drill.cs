@@ -53,6 +53,11 @@ public class Drill : MonoBehaviour
             Debug.Log(drillFirst);
             Debug.Log(drillsecond);
         }
+        else if (drillsecond < 0 && drillFirst < 0)
+        {
+            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
     }
 
     public void PointerDown()
