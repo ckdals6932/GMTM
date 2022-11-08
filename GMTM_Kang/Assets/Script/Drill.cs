@@ -16,11 +16,16 @@ public class Drill : MonoBehaviour
 
     public Animator dooranim;
 
+    private AudioSource theAudio;
+
+    [SerializeField]
+    private AudioClip[] clip;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        theAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,6 +38,8 @@ public class Drill : MonoBehaviour
     {
         if (drillFirst > 0)
         {
+            theAudio.clip = clip[1];
+            theAudio.Play();
             drillFirst -= Time.deltaTime;
             Debug.Log(drillFirst);
             Debug.Log(drillsecond);
@@ -40,6 +47,8 @@ public class Drill : MonoBehaviour
         else if (drillFirst <= 0 && !eventManager.drillFixSucces)
         {
             eventManager.drillBroken = true;
+            //theAudio.clip = clip[0];
+            //theAudio.Play();
             Debug.Log(drillFirst);
             Debug.Log(drillsecond);
         }

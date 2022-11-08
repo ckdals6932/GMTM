@@ -5,6 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 public class PlayerTest : MonoBehaviour
 {
+    private AudioSource theAudio;
+
+    [SerializeField]
+    private AudioClip[] clip;
+
     public warnning warnning;
 
     public Drill drill;
@@ -37,7 +42,7 @@ public class PlayerTest : MonoBehaviour
     void Start()
     {
         //ThrowingTutorial call = GameObject.Find("NoSteamVRFallbackObjects").GetComponent<ThrowingTutorial>();
-        
+        theAudio = GetComponent<AudioSource>();
     }
 
 
@@ -47,12 +52,29 @@ public class PlayerTest : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.gameObject.tag == "EventKey")
+                {
+                    theAudio.clip = clip[0];
+                    theAudio.Play();
+                }
+            }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            //theAudio.clip = clip[0];
+            //theAudio.Stop();
+        }
 
         if (Input.GetMouseButton(0))
         {
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.Log(hit.transform.gameObject);
+
 
                 //이벤트 매체에 대한 상호작용
                 if (hit.transform.gameObject.tag == "EventKey")
@@ -62,6 +84,10 @@ public class PlayerTest : MonoBehaviour
                     text.SetActive(true);
                     LimitTime -= Time.deltaTime;
                     text_Timer.text = "" + Mathf.Round(LimitTime);
+
+
+                    
+
                     if (LimitTime <= 1)
                     {
                         Debug.Log("Event key Check");
