@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
+
 public class PlayerTest : MonoBehaviour
 {
     private AudioSource theAudio;
@@ -38,6 +42,22 @@ public class PlayerTest : MonoBehaviour
 
     public bool keyboardSound = false;
 
+    public XRController controller = null;
+
+    ////상호작용시 원이 돌아가는것
+    //[Header("Radial Timers")]
+    //[SerializeField] private float indicatorTimer = 1.0f;
+    //[SerializeField] private float maxIndicatorTimer = 1.0f;
+
+    //[Header("UI Indicator")]
+    //[SerializeField] private Image radialIndicatorUI = null;
+
+    //[Header("key Codes")]
+    //[SerializeField] private KeyCode selectKey = KeyCode.Mouse0;
+    //[Header("Unity Event")]
+    //[SerializeField] private UnityEvent myEvent = null;
+
+    //private bool shouldUpdate = false;
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +76,13 @@ public class PlayerTest : MonoBehaviour
         RaycastHit hit;
 
 
-
+        if(controller.inputDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool XButton))
+        {
+            if (XButton == true)
+            {
+                
+            }
+        }
         //if (Input.GetMouseButtonDown(0))
         //{
         //    if (Physics.Raycast(ray, out hit))
@@ -198,4 +224,6 @@ public class PlayerTest : MonoBehaviour
             }
         }
     }
+
+  
 }
