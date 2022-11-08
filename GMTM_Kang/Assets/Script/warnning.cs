@@ -12,10 +12,14 @@ public class warnning : MonoBehaviour
 
     public bool Eventwarnning;
 
+    private AudioSource theAudio;
+
+    private bool Sound = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        theAudio = GetComponent<AudioSource>();
         event_check_1 = false;
     }
 
@@ -30,12 +34,20 @@ public class warnning : MonoBehaviour
         if (other.tag == "Player")
         {
             Debug.Log("check");
+
+            theAudio.Play();
+
             for (int i = 0; i < event_1.Count; i++)
             {
                 event_1[i].GetComponent<Outline>().enabled = true;
                 Eventwarnning = true;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 
     public bool warnningCheck()

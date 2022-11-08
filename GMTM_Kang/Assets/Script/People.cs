@@ -17,6 +17,10 @@ public class People : MonoBehaviour
 
     private NavMeshAgent navMeshAgent;
 
+    private AudioSource theAudio;
+
+    private bool Sound = false;
+
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -24,7 +28,7 @@ public class People : MonoBehaviour
 
     void Start()
     {
-        
+        theAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,6 +37,13 @@ public class People : MonoBehaviour
         peopleUpdate();
         if (Running)
         {
+            if (!Sound)
+            {
+                theAudio.Play();
+            }
+
+            Sound = true;
+
             navMeshAgent.SetDestination(exitPosition.position);
         }
     }

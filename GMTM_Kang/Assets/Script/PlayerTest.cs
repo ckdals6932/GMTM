@@ -12,8 +12,6 @@ public class PlayerTest : MonoBehaviour
 
     public warnning warnning;
 
-    public Drill drill;
-
     public EventManager eventManager;
 
     public bool EventKey;
@@ -38,6 +36,9 @@ public class PlayerTest : MonoBehaviour
 
     public GameObject key;
 
+    public bool keyboardSound = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,23 +52,22 @@ public class PlayerTest : MonoBehaviour
     {
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
         RaycastHit hit;
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject.tag == "EventKey")
-                {
-                    theAudio.clip = clip[0];
-                    theAudio.Play();
-                }
-            }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            //theAudio.clip = clip[0];
-            //theAudio.Stop();
-        }
+
+
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (Physics.Raycast(ray, out hit))
+        //    {
+        //        if (hit.transform.gameObject.tag == "EventKey")
+        //        {
+        //            theAudio.clip = clip[0];
+        //            theAudio.Play();
+        //        }
+        //    }
+        //} 
 
         if (Input.GetMouseButton(0))
         {
@@ -79,19 +79,23 @@ public class PlayerTest : MonoBehaviour
                 //이벤트 매체에 대한 상호작용
                 if (hit.transform.gameObject.tag == "EventKey")
                 {
-                    //리미트 시간 설정 
-
                     text.SetActive(true);
                     LimitTime -= Time.deltaTime;
                     text_Timer.text = "" + Mathf.Round(LimitTime);
-
-
-                    
+                    if (!keyboardSound)
+                    {
+                        keyboardSound = true;
+                        theAudio.clip = clip[0];
+                        theAudio.Play();
+                    }
 
                     if (LimitTime <= 1)
                     {
                         Debug.Log("Event key Check");
                         text.SetActive(false);
+
+                        theAudio.clip = clip[0];
+                        theAudio.Stop();
 
                         //활성화된 오브젝트 해결을 하였을 때
                         if (hit.transform.gameObject.name == "mesh_props_keyboard_01_key")
@@ -180,12 +184,18 @@ public class PlayerTest : MonoBehaviour
 
             }
         }
-
         if (Input.GetMouseButtonUp(0))
         {
             //리미트 시간 설정 
             LimitTime = 5.5f;
             text.SetActive(false);
+
+            if(keyboardSound)
+            {
+                keyboardSound = false;
+                theAudio.clip = clip[0];
+                theAudio.Stop();
+            }
         }
     }
 }

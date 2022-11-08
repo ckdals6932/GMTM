@@ -16,12 +16,16 @@ public class Drill : MonoBehaviour
 
     public Animator dooranim;
 
+    public bool DrillOnOff = false;
+
+    public bool DrillBroken = false;
+
     private AudioSource theAudio;
 
     [SerializeField]
     private AudioClip[] clip;
 
-
+    private bool firstSound = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,28 +42,59 @@ public class Drill : MonoBehaviour
     {
         if (drillFirst > 0)
         {
-            theAudio.clip = clip[1];
-            theAudio.Play();
+            if (!firstSound)
+            {
+                theAudio.clip = clip[0];
+                theAudio.Play();
+            }
+
+            firstSound = true;
+
             drillFirst -= Time.deltaTime;
-            Debug.Log(drillFirst);
-            Debug.Log(drillsecond);
+            //Debug.Log(drillFirst);
+            //Debug.Log(drillsecond);
         }
         else if (drillFirst <= 0 && !eventManager.drillFixSucces)
         {
+            if (firstSound)
+            {
+                theAudio.clip = clip[0];
+                theAudio.Stop();
+
+                theAudio.clip = clip[1];
+                theAudio.Play();
+            }
+
+            firstSound = false;
+
             eventManager.drillBroken = true;
-            //theAudio.clip = clip[0];
-            //theAudio.Play();
+            DrillBroken = true;
             Debug.Log(drillFirst);
             Debug.Log(drillsecond);
         }
         else if (eventManager.drillFixSucces && drillsecond > 0 && !eventManager.drillBroken)
         {
+            if (!firstSound)
+            {
+                theAudio.clip = clip[1];
+                theAudio.Stop();
+
+                theAudio.clip = clip[0];
+                theAudio.Play();
+            }
+
+            firstSound = true;
+
+            DrillBroken = true;
             drillsecond -= Time.deltaTime;
             Debug.Log(drillFirst);
             Debug.Log(drillsecond);
         }
         else if (drillsecond < 0 && drillFirst < 0)
         {
+            theAudio.clip = clip[0];
+            theAudio.Stop();
+
             Destroy(gameObject);
             gameObject.SetActive(false);
             dooranim.SetBool("isopen", true);
