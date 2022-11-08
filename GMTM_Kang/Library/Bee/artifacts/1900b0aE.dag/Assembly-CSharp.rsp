@@ -361,6 +361,7 @@
 "Assets/Script/PlayerController.cs"
 "Assets/Script/PlayerTest.cs"
 "Assets/Script/PlayerToTarger.cs"
+"Assets/Script/RadialIndicatorClick.cs"
 "Assets/Script/SoundManager.cs"
 "Assets/Script/Stateus.cs"
 "Assets/Script/ThrowingTutorial.cs"

@@ -25,6 +25,8 @@ public class PlayerTest : MonoBehaviour
     //시간를 나타내는 텍스트
     public GameObject text;
 
+    public GameObject image;
+
     //돈을 얻으면 뒤에 가방
     public GameObject bag;
 
@@ -44,6 +46,7 @@ public class PlayerTest : MonoBehaviour
     {
         //ThrowingTutorial call = GameObject.Find("NoSteamVRFallbackObjects").GetComponent<ThrowingTutorial>();
         theAudio = GetComponent<AudioSource>();
+        LimitTime = 5.5f;
     }
 
 
@@ -74,14 +77,13 @@ public class PlayerTest : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.Log(hit.transform.gameObject);
-
-
+                image.SetActive(true);
                 //이벤트 매체에 대한 상호작용
                 if (hit.transform.gameObject.tag == "EventKey")
                 {
                     text.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime + "s";
                     if (!keyboardSound)
                     {
                         keyboardSound = true;
@@ -89,7 +91,7 @@ public class PlayerTest : MonoBehaviour
                         theAudio.Play();
                     }
 
-                    if (LimitTime <= 1)
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Event key Check");
                         text.SetActive(false);
@@ -122,9 +124,9 @@ public class PlayerTest : MonoBehaviour
                     {
                         text.SetActive(true);
                         LimitTime -= Time.deltaTime;
-                        text_Timer.text = "" + Mathf.Round(LimitTime);
+                        text_Timer.text = "" + LimitTime + "s";
 
-                        if (LimitTime <= 1)
+                        if (LimitTime <= 0)
                         {
                             Debug.Log("Check");
                             eventManager.drillFixSucces = true;
@@ -150,9 +152,9 @@ public class PlayerTest : MonoBehaviour
                     Debug.Log("Money Check");
                     text.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime + "s";
 
-                    if (LimitTime <= 1)
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Check");
                         GetComponent<ThrowingTutorial>().HaveThrows = true;
@@ -169,9 +171,9 @@ public class PlayerTest : MonoBehaviour
                     Debug.Log("bag Check");
                     text.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime + "s";
 
-                    if (LimitTime <= 1)
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Check");
                         GetComponent<ThrowingTutorial>().HaveThrows = true;
