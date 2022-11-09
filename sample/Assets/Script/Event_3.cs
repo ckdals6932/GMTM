@@ -16,7 +16,7 @@ public class Event_3 : MonoBehaviour
 
     public bool vaultbutton_Click = false;
 
-    public bool m_IsButtonDowning = false;
+    public bool m_IsButtonDowning = false   ;
 
 
     // Start is called before the first frame update

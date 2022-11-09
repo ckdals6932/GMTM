@@ -4,9 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
+
 public class PlayerTest : MonoBehaviour
 {
+    public InputActionProperty LeftTriger;
+
     public GameObject LeftHand;
+
+    //충돌체 확인
+    public GameObject hitObject;
 
     private AudioSource theAudio;
 
@@ -20,7 +26,7 @@ public class PlayerTest : MonoBehaviour
     public bool EventKey;
 
     // 소요 시간
-    public float LimitTime = 5.5f;
+    public float LimitTime = 5f;
 
     //텍스트 문자 
     public TextMeshProUGUI text_Timer;
@@ -41,13 +47,23 @@ public class PlayerTest : MonoBehaviour
 
     public bool keyboardSound = false;
 
-    public InputActionProperty XButton;
+    public GameObject Drill;
 
+    private GameObject DrillFreeView;
+
+    //상호작용시 원이 돌아가는것
+    [Header("Radial Timers")]
+    [SerializeField] private float indicatorTimer = 1.0f;
+
+    [Header("UI Indicator")]
+    [SerializeField] private Image radialIndicatorUI = null;
+    [SerializeField] public GameObject CircleImage;
+
+    private bool trigerCheck = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        //ThrowingTutorial call = GameObject.Find("NoSteamVRFallbackObjects").GetComponent<ThrowingTutorial>();
         theAudio = GetComponent<AudioSource>();
     }
 
@@ -55,21 +71,58 @@ public class PlayerTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        
-        if (XButton.action.WasPressedThisFrame())
+        //왼쪽 트리거 버튼을 눌렀을 때
+        if (LeftTriger.action.WasPressedThisFrame())
         {
-            Debug.Log("tet 1");
+            trigerCheck = true;
+        }
+
+
+        //왼쪽 트리거 버튼을 땠을 때
+        if (LeftTriger.action.WasReleasedThisFrame())
+        {
+            trigerCheck = false;
+            Debug.Log("released");
+            //리미트 시간 설정 
+            LimitTime = 5f;
+            text.SetActive(false);
+
+            if (keyboardSound)
+            {
+                keyboardSound = false;
+                theAudio.clip = clip[0];
+                theAudio.Stop();
+            }
+
+            CircleImage.SetActive(false);
+            indicatorTimer = 0f;
+            radialIndicatorUI.fillAmount = indicatorTimer;
+        }
+
+        triggerOnoff(trigerCheck);
+
+    }
+
+    private void triggerOnoff(bool onoff)
+    {
+        if (onoff)
+        {
+            RaycastHit hit;
             if (Physics.Raycast(LeftHand.transform.position, LeftHand.transform.forward, out hit))
             {
-                Debug.Log(hit.transform.gameObject.tag);
+                //충돌체 등록
+                hitObject = hit.transform.gameObject;
+
                 //이벤트 매체에 대한 상호작용
                 if (hit.transform.gameObject.tag == "EventKey")
                 {
-                    Debug.Log(transform.gameObject.tag);
                     text.SetActive(true);
+                    CircleImage.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime.ToString("F1") + "s";
+                    indicatorTimer += Time.deltaTime / LimitTime;
+                    radialIndicatorUI.fillAmount = indicatorTimer;
+
                     if (!keyboardSound)
                     {
                         keyboardSound = true;
@@ -77,16 +130,17 @@ public class PlayerTest : MonoBehaviour
                         theAudio.Play();
                     }
 
-                    if (LimitTime <= 1)
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Event key Check");
                         text.SetActive(false);
+                        CircleImage.SetActive(false);
 
                         theAudio.clip = clip[0];
                         theAudio.Stop();
 
                         //활성화된 오브젝트 해결을 하였을 때
-                        if (transform.gameObject.name == "mesh_props_keyboard_01_key")
+                        if (hit.transform.gameObject.name == "mesh_props_keyboard_01_key")
                         {
                             warnning.GetComponent<warnning>().event_check_1 = true;
                             for (int i = 0; i < warnning.event_1.Count; i++)
@@ -97,89 +151,113 @@ public class PlayerTest : MonoBehaviour
                         }
                         else
                         {
-                            transform.gameObject.GetComponent<MeshCollider>().enabled = false;
-                            transform.gameObject.GetComponent<Outline>().enabled = false;
+                            hit.transform.gameObject.GetComponent<MeshCollider>().enabled = false;
+                            hit.transform.gameObject.GetComponent<Outline>().enabled = false;
                         }
                     }
                 }
+
+                //드릴 오브젝트 설치
+                if (hit.transform.gameObject.tag == "DrillFreeView")
+                {
+                    Debug.Log("Check222");
+
+                    text.SetActive(true);
+                    CircleImage.SetActive(true);
+                    LimitTime -= Time.deltaTime;
+                    text_Timer.text = "" + LimitTime.ToString("F1") + "s";
+                    //indicatorTimer += Time.deltaTime / LimitTime;
+                    //radialIndicatorUI.fillAmount = indicatorTimer;
+
+                    if (LimitTime <= 0)
+                    {
+                        Debug.Log("Check");
+                        Drill.SetActive(true);
+                        text.SetActive(false);
+                        CircleImage.SetActive(false);
+                        hit.transform.gameObject.SetActive(false);
+
+                    }
+
+                }
+
                 //드릴 오브젝트 수리
                 if (hit.transform.gameObject.tag == "Drill")
                 {
                     if (eventManager.drillBroken)
                     {
                         text.SetActive(true);
+                        CircleImage.SetActive(true);
                         LimitTime -= Time.deltaTime;
-                        text_Timer.text = "" + Mathf.Round(LimitTime);
+                        text_Timer.text = "" + LimitTime.ToString("F1") + "s";
+                        indicatorTimer += Time.deltaTime / LimitTime;
+                        radialIndicatorUI.fillAmount = indicatorTimer;
 
-                        if (LimitTime <= 1)
+                        if (LimitTime <= 0)
                         {
                             Debug.Log("Check");
                             eventManager.drillFixSucces = true;
                             text.SetActive(false);
+                            CircleImage.SetActive(false);
                             eventManager.drillBroken = false;
                         }
                     }
                 }
+
 
                 //열쇠에 대한 상호작용
                 if (hit.transform.gameObject.tag == "Key" && !isCardkey)
                 {
                     key.SetActive(false);
                     isCardkey = true;
-                    Destroy(transform.gameObject, 0.1f);
+                    Destroy(hit.transform.gameObject, 0.1f);
                 }
 
                 // 돈 오브젝트에 대한 상호작용
-                if (transform.gameObject.tag == "Money")
+                if (hit.transform.gameObject.tag == "Money")
                 {
 
-                    idcode = transform.gameObject.name;
-                    Debug.Log("Money Check");
+                    idcode = hit.transform.gameObject.name;
                     text.SetActive(true);
+                    CircleImage.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime.ToString("F1") + "s";
 
-                    if (LimitTime <= 1)
+                    indicatorTimer += Time.deltaTime / LimitTime;
+                    radialIndicatorUI.fillAmount = indicatorTimer;
+
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Check");
                         GetComponent<ThrowingTutorial>().HaveThrows = true;
                         text.SetActive(false);
-                        Destroy(transform.gameObject, 0.1f);
+                        CircleImage.SetActive(false);
+                        Destroy(hit.transform.gameObject, 0.1f);
                         bag.SetActive(true);
                     }
                 }
-
                 // 가방에 대한 상호작용
-                if (transform.gameObject.tag == "Bag")
+                if (hit.transform.gameObject.tag == "Bag")
                 {
-                    idcode = transform.gameObject.name;
+                    idcode = hit.transform.gameObject.name;
                     Debug.Log("bag Check");
                     text.SetActive(true);
+                    CircleImage.SetActive(true);
                     LimitTime -= Time.deltaTime;
-                    text_Timer.text = "" + Mathf.Round(LimitTime);
+                    text_Timer.text = "" + LimitTime.ToString("F1") + "s";
+                    indicatorTimer += Time.deltaTime / LimitTime;
+                    radialIndicatorUI.fillAmount = indicatorTimer;
 
-                    if (LimitTime <= 1)
+                    if (LimitTime <= 0)
                     {
                         Debug.Log("Check");
                         GetComponent<ThrowingTutorial>().HaveThrows = true;
                         text.SetActive(false);
-                        Destroy(transform.gameObject, 0.1f);
+                        CircleImage.SetActive(false);
+                        Destroy(hit.transform.gameObject, 0.1f);
                         bag.SetActive(true);
                     }
                 }
-            }
-        }
-        if (XButton.action.WasReleasedThisFrame())
-        {
-            //리미트 시간 설정 
-            LimitTime = 5.5f;
-            text.SetActive(false);
-
-            if(keyboardSound)
-            {
-                keyboardSound = false;
-                theAudio.clip = clip[0];
-                theAudio.Stop();
             }
         }
     }
