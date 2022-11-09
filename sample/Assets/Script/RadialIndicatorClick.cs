@@ -33,40 +33,18 @@ public class RadialIndicatorClick : MonoBehaviour
     {
         if (Input.GetKey(selectKey))
         {
-            shouldUpdate = false;
 
-            indicatorTimer -= Time.deltaTime;
-            radialIndicatorUI.enabled = true;
+            indicatorTimer += Time.deltaTime / 5;
             radialIndicatorUI.fillAmount = indicatorTimer;
 
-            if (indicatorTimer <= 0)
-            {
-                indicatorTimer = maxIndicatorTimer;
-                radialIndicatorUI.fillAmount = maxIndicatorTimer;
-                radialIndicatorUI.enabled = false;
-                //myEvent.Invoke();
-            }
-        }
-        else
-        {
-            if (shouldUpdate)
-            {
-                indicatorTimer += Time.deltaTime;
-                radialIndicatorUI.fillAmount = indicatorTimer;
-
-                if (indicatorTimer >= maxIndicatorTimer)
-                {
-                    indicatorTimer = maxIndicatorTimer;
-                    radialIndicatorUI.fillAmount = maxIndicatorTimer;
-                    radialIndicatorUI.enabled = false;
-                    shouldUpdate = false;
-                }
-            }
+            
         }
 
         if (Input.GetKeyUp(selectKey))
         {
-            shouldUpdate = true;
+            indicatorTimer = 0f;
+            radialIndicatorUI.fillAmount = indicatorTimer;
+
         }
     }
 }

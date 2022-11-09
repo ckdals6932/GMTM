@@ -23,7 +23,7 @@ public class M4A1 : MonoBehaviour
         spawnedBullet.transform.position = barrel.position;
         spawnedBullet.GetComponent<Rigidbody>().velocity = barrel.forward * speed;
         audioSource.PlayOneShot(audioClip);
-        Destroy(spawnedBullet, 5);
+        Destroy(spawnedBullet, 0.5f);
     }
 
 }
