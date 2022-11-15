@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Magazine
+  - LeftHand
+  - RightHand
+  - Bag
+  - UIEvent
+  - Key
+  - Drill
+  - EventKey
+  - Money
+  - Iron door
+  - DrillFreeView
+  - FxTemporaire
+  - Iron door1
+  - Iron door2
+  - Bullet
+  - PlayerBullet
+  - Enemy
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Grab
+  - Ground
+  - Body
+  - Grab Interactable
+  - Player
+  - Second Hand Grab
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
